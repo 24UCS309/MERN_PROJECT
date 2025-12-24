@@ -1,8 +1,8 @@
 const express = require("express");
 const cryptojs = require("crypto-js");
 const jwt = require("jsonwebtoken");
-const pool = require("../../db/pool");
-const result = require("../../utils/result");
+const pool = require("../../../db/pool");
+const result = require("../../../utils/result");
 
 const router = express.Router();
 

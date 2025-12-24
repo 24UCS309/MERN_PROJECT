@@ -7,10 +7,11 @@ const result=require("../../utils/result")
 
 router.post("/register-to-course", (req, res) => {
   const { name, email, course_id, mobile_no } = req.body
-
+    const pass="sunbeam"
+    const newpwd=cryptojs.SHA256(pass).toString()
   const sql = `insert into students(name,email,course_id,mobile_no) values(?,?,?,?)`
   const sql1 = `select * from users where email=?`
-  const sql2 = `insert into users(email) values(?)`
+  const sql2 = `insert into users(email,password) values(?,?)`
 
   pool.query(sql1, [email], (error, data) => {
     if (error) {
@@ -19,7 +20,7 @@ router.post("/register-to-course", (req, res) => {
     else if (data.length == 0) {
 
       
-      pool.query(sql2, [email], (error1,data1) => {
+      pool.query(sql2, [email,newpwd], (error1,data1) => {
         if (error1) {
           return res.send(result.createResult(error1))
         }

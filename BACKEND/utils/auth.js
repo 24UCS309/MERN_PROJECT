@@ -1,29 +1,36 @@
-const jwt=require("jsonwebtoken")
+const result = require("./result")
+const config = require("./config")
+const jwt = require("jsonwebtoken")
 
-const config=require("../utils/config")
-const result=require("../utils/result")
+function authUser(req, res, next) {
+    const allowedUrls = ["/auth/signup", "/auth/signin"]
 
-function authUser(req,res,next){
-    const allowUserUrls=['/users/signup','/users/signup']
-    if(allowUserUrls.includes(req.url))
-        next
-    else{
+
+    if (allowedUrls.includes(req.url)) {
+        return next()
+    } else {
         const token = req.headers.token
-        if(!token){
-            res.send(result.createResult("Token is missing!!!!!"))
-        }
-        else{
-            try{
-                const payload=jwt.verify(token,config.SECRET)
-                req.headers.uid=payload.uid
-                req.headers.email=payload.email
+
+        if (!token) {
+            res.send(result.createResult("Token is Missing"))
+        } else {
+            try {
+                const payload = jwt.verify(token, config.SECRET)
+                // req.headers.uid = payload.uid
+                req.headers.email = payload.email
+                req.headers.role=payload.role
                 next()
-            }
-            catch(e){
-                res.send(result.createResult("Toke is Invalid!!!!!"))
+            } catch (ex) {
+                return res.send(result.createResult("Token is Invalid"))
             }
         }
     }
 }
 
-module.exports={authUser}
+function checkAuthorization(req,res,next){
+    if(role=='admin'){
+        return next()
+    }
+}
+
+module.exports = {authUser ,checkAuthorization}
