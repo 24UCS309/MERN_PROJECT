@@ -1,7 +1,7 @@
 const express = require("express")
 const commonRouter = require("./routes/common/common_api")
-const studentRouter = require("./vj-routes/student")
-const courseRouter = require("./vj-routes/course")
+const studentRouter = require("../VJ-Backend/vj-routes/student")
+const courseRouter = require("../VJ-Backend/vj-routes/course")
 
 const app = express()
 
