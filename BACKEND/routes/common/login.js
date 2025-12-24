@@ -23,7 +23,11 @@ router.post("/signin",(req,res)=>{
     const{email,password}=req.body
     const hashpwd=cryptoJs.SHA256(password).toString()
     const  sql=`SELECT * FROM users WHERE email=? AND password=?`
+
     const sql2=`INSERT INTO users (email,password)VALUES (?,?)`
+
+    
+
     pool.query(sql,[email,hashpwd],(error,data)=>{
         if(error){
             res.send(result.createResult(error))
