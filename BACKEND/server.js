@@ -1,12 +1,14 @@
 const express = require("express")
-const commonRouter = require("./routes/common/common_api")
-const studentRouter = require("../VJ-Backend/vj-routes/student")
-const courseRouter = require("../VJ-Backend/vj-routes/course")
+const commonRouter = require("./routes/common/allActiveCourse")
+const commonRouter1 = require("./routes/common/login")
+const studentRouter = require("../../routes/students")
+const courseRouter = require("../../routes/course")
 
 const app = express()
 
 app.use(express.json())
 app.use("/common", commonRouter)
+app.use("/common", commonRouter1)
 app.use("/students",studentRouter)
 app.use("/courses",courseRouter)
 
