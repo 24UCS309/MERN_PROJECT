@@ -17,7 +17,6 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
   const {
-    course_id,
     course_name,
     description,
     fees,
@@ -25,11 +24,10 @@ router.post("/", (req, res) => {
     end_date,
     video_expire_days,
   } = req.body;
-  const sql = `insert into courses(course_id,course_name, description, fees, start_date, end_date,video_expire_days) values(?,?,?,?,?,?,?)`;
+  const sql = `insert into courses(course_name, description, fees, start_date, end_date,video_expire_days) values(?,?,?,?,?,?,?)`;
   pool.query(
     sql,
     [
-      course_id,
       course_name,
       description,
       fees,
