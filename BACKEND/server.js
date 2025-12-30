@@ -4,10 +4,16 @@ const commonRouter1 = require("./routes/common/login")
 const studentRouter = require("./routes/students/students")
 const courseRouter = require("./routes/admin/courses/course")
 const videoRouter=require("./routes/admin/videos/videos")
+const { authUser,checkAuthorization } = require("./utils/auth") 
+const cors=require("cors")
 
 const app = express()
 
+//app.use(checkAuthorization)
+
+app.use(cors())
 app.use(express.json())
+app.use(authUser)
 app.use("/course", commonRouter)
 app.use("/auth", commonRouter1)
 app.use("/students",studentRouter)

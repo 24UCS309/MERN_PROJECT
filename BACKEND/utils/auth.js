@@ -3,34 +3,42 @@ const config = require("./config")
 const jwt = require("jsonwebtoken")
 
 function authUser(req, res, next) {
-    const allowedUrls = ["/auth/signup", "/auth/signin"]
+  if (
+    req.url.startsWith("/courses")||
+            req.url==="/auth/signin"||
+            req.url==="/course/all-active-courses"
+  ) {
+    return next();
+  }
 
+  const token = req.headers.token;
 
-    if (allowedUrls.includes(req.url)) {
-        return next()
-    } else {
-        const token = req.headers.token
+  if (!token) {
+    return res.send({ status: "error", error: "Token is Missing" });
+  }
 
-        if (!token) {
-            res.send(result.createResult("Token is Missing"))
-        } else {
-            try {
-                const payload = jwt.verify(token, config.SECRET)
-                // req.headers.uid = payload.uid
-                req.headers.email = payload.email
-                req.headers.role=payload.role
-                next()
-            } catch (ex) {
-                return res.send(result.createResult("Token is Invalid"))
-            }
-        }
-    }
+  try {
+    const payload = jwt.verify(token, config.SECRET);
+    req.headers.email = payload.email;
+    req.headers.role = payload.role;
+    next();
+  } catch {
+    return res.send({ status: "error", error: "Invalid Token" });
+  }
 }
 
-function checkAuthorization(req,res,next){
-    if(role=='admin'){
-        return next()
-    }
+
+function checkAuthorization(req, res, next) {
+  const role = req.headers.role
+
+  if (role === "admin") {
+    return next()
+  }
+
+  return res.send({
+    status: "error",
+    error: "Unauthorized access (Admin only)"
+  })
 }
 
 module.exports = {authUser ,checkAuthorization}
