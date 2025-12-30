@@ -1,52 +1,63 @@
-import React, { useEffect, useState } from 'react'
-import Navbar from '../components/Navbar'
-import { getUserProfile, updateProfile } from '../Services/userServices'
-import { toast } from 'react-toastify'
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import Navbar from "../components/Navbar";
+import { getProfile } from "../services/userServices";
 
 function Profile() {
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [mobile, setMobile] = useState('')
+  const navigate = useNavigate();
+  const [student, setStudent] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        console.log('Profile component loaded')
-        getProfile()
-    }, [])
+  useEffect(() => {
+    fetchStudentDetails();
+  }, []);
 
-    const getProfile = async () => {
-        const token = sessionStorage.getItem('token')
-        const result = await getUserProfile(token)
-        if (result.status == "success") {
-            const user = result.data[0]
-            setName(user.name)
-            setEmail(user.email)
-            setMobile(user.mobile)
-        }
+  const fetchStudentDetails = async () => {
+    try {
+      const res = await getProfile();
+
+      console.log("Profile API response:", res); 
+      
+
+      if (res.status === "success") {
+        setStudent(res.data[0]);
+      }
+    } catch (err) {
+      console.error("API Error:", err);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const update = async () => {
-        const token = sessionStorage.getItem('token')
-        const result = await updateProfile(token, mobile)
-        if (result.status == "success")
-            toast.success("Profile Updated")
-    }
-    return (
-        <div>
-            
-            <div className='container'>
-                <div className='mt-3 mb-3'>
-                    <input type="text" class="form-control" id="inputEmail" value={email} />
-                </div>
-                <div className='mb-3 d-flex'>
-                    <input type="text" className="form-control me-3" id="inputName" value={name} />
-                    <input type="tel" className="form-control ms-3" id="inputMobile" value={mobile} onChange={e => setMobile(e.target.value)} />
-                </div>
-                <div>
-                    <button className="btn btn-success" onClick={update}>Update</button>
-                </div>
+  if (loading) return <h3>Loading...</h3>;
+  if (!student) return <h3>No Profile Found</h3>;
+
+  return (
+    <>
+     
+      <div className="container my-4">
+        <div className="row justify-content-center">
+          <div className="col-md-4">
+            <div className="card shadow">
+              <div className="card-body text-center">
+                <h4>Register No: {student.reg_no}</h4>
+                <h5>Name: {student.name}</h5>
+                <h6>Email: {student.email}</h6>
+                <h6>Mobile: {student.mobile_no}</h6>
+
+                <button
+                  className="btn btn-primary mt-2"
+                  onClick={() => navigate("/updtePwd")}
+                >
+                  Change Password
+                </button>
+              </div>
             </div>
+          </div>
         </div>
-    )
+      </div>
+    </>
+  );
 }
 
-export default Profile
+export default Profile;
