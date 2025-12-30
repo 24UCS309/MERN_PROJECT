@@ -5,6 +5,18 @@ const pool=require("../../db/pool")
 const result=require("../../utils/result")
 
 
+
+
+router.get("/my-profile",(req,res)=>{
+    const email=req.headers.email
+    const sql=`select *from students  where email=?`
+    pool.query(sql,[email],(error,data)=>{
+        res.send(result.createResult(error,data))
+    })
+    
+  
+})
+
 router.post("/register-to-course", (req, res) => {
   const { name, email, course_id, mobile_no } = req.body
     const pass="sunbeam"
