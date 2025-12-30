@@ -24,6 +24,24 @@ export async function getUserProfile(token) {
     return response.data
 }
 
+export async function getProfile(email){
+    const token=sessionStorage.getItem("token")
+    const headers={token:token}
+    const URL =config.URL+`students/my-profile`
+   
+    const res=await axios.get(URL,{headers})
+    return res.data
+}
+
+export async function changePassword(newPassword,confirmPassword) {
+    const URL=config.URL+"students/change-password"
+    const body={newPassword,confirmPassword}
+     const token=sessionStorage.getItem("token")
+    const headers={token:token}
+    const res=await axios.put(URL,body,{headers})
+    return res.data
+}
+
 export async function updateProfile(token, mobile) {
     const URL = config.BASE_URL + '/profile'
     const headers = { token }

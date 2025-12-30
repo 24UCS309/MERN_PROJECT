@@ -50,6 +50,7 @@ function App() {
         <Route path="/ViewMore/:course_id" element={<ViewMore />} />
 
         <Route path="*" element={<Navigate to="/home" />} />
+         <Route path="/updtePwd" element={<UpdatePassword/>}/>
       </Routes>
 
       <ToastContainer />
