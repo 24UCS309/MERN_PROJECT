@@ -16,7 +16,7 @@ router.post("/signin",(req,res)=>{
     const hashpwd=cryptoJs.SHA256(password).toString()
     const  sql=`SELECT * FROM users WHERE email=? AND password=?`
 
-    const sql2=`INSERT INTO users (email,password)VALUES (?,?)`
+   // const sql2=`INSERT INTO users (email,password)VALUES (?,?)`
 
     
 
@@ -26,9 +26,9 @@ router.post("/signin",(req,res)=>{
         }
         else if(data.length==0){
             // res.send("Please enter valid email and password")
-            pool.query(sql2,[email,hashpwd],(error1,data1)=>{
-                res.send(result.createResult(error1,data1))
-            })
+           // pool.query(sql2,[email,hashpwd],(error1,data1)=>{
+                res.send(result.createResult("invalid email or password"))
+            //})
         }
         else{
             //JWT : JSON WEB TOKEN
